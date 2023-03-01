@@ -4,8 +4,7 @@ from .models import Tarefa
 from django.contrib import messages
 from django.contrib.messages import constants
 from .forms import TarefaForm
-
-
+from django.contrib.auth.models import User
 
 
 def about(request):
@@ -21,7 +20,9 @@ def home(request):
         if get_filter:
             tarefas = tarefas.filter(status=get_filter)
 
-        return render(request, 'home.html', {'tarefas': tarefas})
+        user = request.user
+
+        return render(request, 'home.html', {'tarefas': tarefas, 'user': user})
 
     elif request.method == 'POST': # se for post
 
@@ -82,7 +83,6 @@ def editar_tarefa(request, id):
 
         if editar_tarefa.is_valid():
             editar_tarefa.save()
-
             messages.info(request, 'Tarefa editada com sucesso')
             return redirect('/home/')
 
@@ -121,3 +121,75 @@ def excluir_tarefa(request, id):
     messages.info(request, 'Tarefa deletada com sucesso.')
 
     return redirect('/home/')
+
+
+def alterar_senha(request):
+
+    if not request.user.is_authenticated:
+        return redirect('/auth/login/?login_info=3')
+
+    if request.method == 'POST':    
+
+        senha_nova = request.POST.get('senha_nova')
+        confirmar_senha = request.POST.get('confirmar_senha')
+
+
+        if len(senha_nova.strip()) == 0 or len(confirmar_senha.strip()) == 0:
+            messages.add_message(request, constants.ERROR, 'Campos invalidos.')
+            return redirect('/alterar_senha/')
+
+        if len(senha_nova) < 8:
+            messages.add_message(request, constants.ERROR, 'Senhas menor que 8 digitos')
+            return redirect('/alterar_senha/')
+
+        if senha_nova != confirmar_senha:
+            messages.add_message(request, constants.ERROR, 'Senhas diferentes')
+            return redirect('/alterar_senha/')
+
+        try:
+            user = User.objects.get(username__exact=request.user)
+            user.set_password(senha_nova)
+            user.save()
+
+            messages.success(request, 'Senha alterada com sucesso.')
+            return redirect('/home/')
+        except:
+            messages.error(request, 'Senha nao alterada. tente novamente mais tarde')
+            return redirect('/alterar_senha/')
+        
+    else:
+        return render(request, 'alterar_senha.html')
+    
+
+def alterar_senha_deslogado(request):
+
+    if request.method == 'POST':
+        nome = request.POST.get('nome')
+        senha_nova = request.POST.get('senha_nova')
+        confirmar_senha = request.POST.get('confirmar_senha')
+
+
+        if len(nome.strip()) == 0 or len(senha_nova.strip()) == 0 or len(confirmar_senha.strip()) == 0:
+            messages.error(request, 'Campos invalidos.')
+            return redirect('/alterar_senha_deslogado/')
+
+        if len(senha_nova) < 8:
+            messages.error(request, 'Senha menor que 8 digitos.')
+            return redirect('/alterar_senha_deslogado/')
+
+        if senha_nova != confirmar_senha:
+            messages.error(request, 'Senhas diferentes.')
+            return redirect('/alterar_senha_deslogado/')
+
+        try:
+            user = User.objects.get(username=nome)
+            user.set_password(senha_nova)
+            user.save()
+
+            messages.success(request, 'Senha alterada com sucesso.')
+            return redirect('/auth/login/?login_info=5')
+        except:
+            messages.error(request, 'Senha nao alterada. tente novamente mais tarde')
+            return redirect('/alterar_senha_deslogado/')
+
+    return render(request, 'alterar_senha_deslogado.html')

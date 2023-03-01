@@ -4,6 +4,10 @@ from django.contrib import messages
 from django.contrib.messages import constants
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login as logar, logout
+from .forms import CaptchaForm
+
+
+
 
 def cadastro(request):
 
@@ -14,9 +18,11 @@ def cadastro(request):
 
     if request.method == 'GET':
         cadastro_info = request.GET.get('cadastro_info')
+        captcha = CaptchaForm()
 
         context = {
-            'cadastro_info': cadastro_info
+            'cadastro_info': cadastro_info,
+            'captcha': captcha
         }
 
         return render(request, 'cadastro.html', context=context)
@@ -35,17 +41,24 @@ def cadastro(request):
         if senha != confirmar_senha: 
             return redirect('/auth/cadastro/?cadastro_info=3')
 
-        try:
-            user = User.objects.create_user(
-                username=nome,
-                email=email,
-                password=senha,
-            )
-            return redirect('/auth/cadastro/?cadastro_info=0')
+        captcha = CaptchaForm(request.POST)
 
-        except:
-            return redirect('/auth/cadastro/?cadastro_info=4')
+        if captcha.is_valid():
 
+            try:
+                user = User.objects.create_user(
+                    username=nome,
+                    email=email,
+                    password=senha,
+                )
+                return redirect('/auth/cadastro/?cadastro_info=0')
+
+            except:
+                return redirect('/auth/cadastro/?cadastro_info=4')
+
+        else:
+            return redirect('/auth/cadastro/?cadastro_info=5')
+        
 def login(request):
 
     if request.user.is_authenticated:
@@ -69,12 +82,14 @@ def login(request):
         if len(nome.strip()) == 0 or len(senha.strip()) == 0:
             return redirect('/auth/login/?login_info=1')
 
+        
+
         if user is not None:
             logar(request, user)
 
             return redirect('/home/')
         else:
-            return redirect('/auth/cadastro/?cadastro_info=5')
+            return redirect('/auth/login/?login_info=4')
         
         
 def sair(request):

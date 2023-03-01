@@ -24,6 +24,24 @@
         </div>
         {% endif %}
 
+        {% if login_info == '3' %}
+        <div class="alert alert-danger" role="alert">
+            Voce nao pode alterar senha sem ta logado
+        </div>
+        {% endif %}
+        
+        {% if login_info == '4' %}
+        <div class="alert alert-danger" role="alert">
+            Nome ou senha invalidos. Deseja <a href="/alterar_senha_deslogado/">Redefinir senha</a>?
+        </div>
+        {% endif %}
+
+        {% if login_info == '5' %}
+        <div class="alert alert-success" role="alert">
+            Senha alterada com sucesso.
+        </div>
+        {% endif %}
+
         <form action="{% url 'login' %}" method="POST">
             {% csrf_token %}
             <label>Nome</label>

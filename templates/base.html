@@ -22,16 +22,21 @@
           <div class="navbar-nav">
             {% if user.is_authenticated %}
 
-            <a class="nav-item nav-link active btn btn-warning col-6" style="margin-left: 20px;font-size: 20px; font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;" href="/home/">Inicio</a>
-            <a class="nav-item nav-link btn btn-danger col-6" style="margin-left: 20px;font-size: 20px; font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;" href="/auth/sair/">Sair</a>
+            <a class="nav-item nav-link active btn btn-warning col-2" style="margin-left: 20px;font-size: 20px; font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;" href="/home/">Inicio</a>
+            <a class="nav-item nav-link active btn btn-secondary col-2" style="margin-left: 20px;font-size: 20px; font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;" href="/alterar_senha/">Alterar senha</a>
+            <a class="nav-item nav-link btn btn-danger col-2" style="margin-left: 20px;font-size: 20px; font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;" href="/auth/sair/">Sair</a>
 
             {% else %}
             
-            <a class="nav-item nav-link btn btn-primary col-6" style="margin-left: 20px;font-size: 20px; font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;" href="/auth/cadastro/">Cadastrar</a>
-            <a class="nav-item nav-link btn btn-warning col-6"style="margin-left: 20px;font-size: 20px; font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;" href="/auth/login/">Entrar</a>
+            <a class="nav-item nav-link btn btn-primary col-2" style="margin-left: 20px;font-size: 20px; font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;" href="/auth/cadastro/">Cadastrar</a>
+            <a class="nav-item nav-link btn btn-warning col-2"style="margin-left: 20px;font-size: 20px; font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;" href="/auth/login/">Entrar</a>
 
             {% endif %}
-            <a class="nav-item nav-link btn btn-info col-6" style="margin-left: 20px;font-size: 20px; font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;" href="/">Sobre</a>
+            <a class="nav-item nav-link btn btn-info col-2" style="margin-left: 20px;font-size: 20px; font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;" href="/">Sobre</a>
+            
+            {% if perms.admin.Can_delete_user %}
+            <a class="nav-item nav-link btn btn-primary col-3" style="margin-left: 20px;font-size: 20px; font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;" href="/admin_sistema/">Administração</a>
+            {% endif %}
           </div>
         </div>
       </nav>

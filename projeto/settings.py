@@ -30,7 +30,11 @@ INSTALLED_APPS = [
     'tarefa',
     'usuarios',
     'crispy_forms',
+    'admins',
+    'captcha'
 ]
+
+CAPTCHA_CHALLENGE_FUNCT = 'usuarios.captcha.captcha_challenge'
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -66,17 +70,23 @@ WSGI_APPLICATION = 'projeto.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
 
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.mysql',
+#         'NAME': 'listadetarefas',
+#         'USER': 'root',
+#         'PASSWORD': 'pedrodevsuport1',
+#         'HOST': 'localhost',
+#         'PORT': '3306',
+#     }
+# }
+
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'listadetarefas',
-        'USER': 'root',
-        'PASSWORD': 'pedrodevsuport1',
-        'HOST': 'localhost',
-        'PORT': '3306',
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/4.1/ref/settings/#auth-password-validators
@@ -125,5 +135,6 @@ CRISPY_TEMPLATE_PACK = 'bootstrap4'
 
 
 MESSAGE_TAGS = {
-    constants.ERROR: 'alert-danger'
+    constants.ERROR: 'alert-danger',
+    constants.SUCCESS: 'alert-success',
 }

@@ -15,7 +15,7 @@
 
         <br>
         <br>
-
+        
         <form action="" method="post">
             {% csrf_token %} 
 
@@ -44,6 +44,12 @@
         {% if verificacao_user == '1' %}
             <div class="alert alert-danger" role="alert">
                 Você já esta logado no sistema!
+            </div>
+        {% endif %}
+
+        {% if user == '2' %}
+            <div class="alert alert-danger" role="alert">
+                Seja bem vindo de volta {{user}}
             </div>
         {% endif %}
 

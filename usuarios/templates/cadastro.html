@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% load crispy_forms_tags %}
 
 {% block title %} Cadastrar {% endblock %}
 
@@ -44,7 +45,7 @@
 
         {% if cadastro_info == '5' %}
         <div class="alert alert-danger" role="alert">
-            Usuário não existe. Por sorte, já redirecionamos você para fazer cadastro
+            Captcha invalido.
         </div>
         {% endif %}
 
@@ -61,6 +62,8 @@
             <br>
             <label>Confirmar Senha</label>
             <input class="form-control" type="password" placeholder="Confirmar senha..." name="confirmar_senha">
+            <br>
+            {{ captcha|crispy }}
             <br>
             <input type="submit" class="btn btn-primary" value="Cadastrar">
             <a class="btn btn-warning" href="/auth/login/">Login</a>
